@@ -15,26 +15,17 @@ def get_connection():
 
 @app.route('/ventas', methods=["GET", "POST"])
 def ventas():
-    try:
-        mydb = get_connection()
-        mycursor = mydb.cursor()
+    mydb = get_connection()
+    mycursor = mydb.cursor()
 
-        if request.method == "GET":
-            mycursor.execute("SELECT * FROM Ventas")
-            myresult = mycursor.fetchall()
-            return make_response(jsonify(myresult))
+    if request.method == "GET":
+        mycursor.execute("SELECT * FROM Ventas")
+        myresult = mycursor.fetchall()
+        return make_response(jsonify(myresult))
 
-        elif request.method == "POST":
-            sql = "INSERT INTO Ventas (ciudad, estado, codigo_postal, referencia) VALUES (%s, %s, %s, %s)"
-            val = (
-                request.form['ciudad'],
-                request.form['estado'],
-                request.form['codigo_postal'],
-                request.form['referencia']
-            )
-            mycursor.execute(sql, val)
-            mydb.commit()
-            return make_response(jsonify({"estado": "ok"}))
-
-    except Exception as e:
-        return make_response(jsonify({"error": str(e)}), 500)
+    elif request.method == "POST":
+        sql = "INSERT INTO Ventas (id_cliente, id_libro, ciudad, estado, codigo_postal, referencia) VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (request.form['id_cliente'], request.form['id_libro'], request.form['ciudad'], request.form['estado'], request.form['codigo_postal'], request.form['referencia'])
+        mycursor.execute(sql, val)
+        mydb.commit()
+        return make_response(jsonify({"estado": "ok"}))
