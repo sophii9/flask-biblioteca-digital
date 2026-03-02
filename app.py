@@ -15,17 +15,26 @@ def get_connection():
 
 @app.route('/ventas', methods=["GET", "POST"])
 def ventas():
-    mydb = get_connection()
-    mycursor = mydb.cursor()
+    try:
+        mydb = get_connection()
+        mycursor = mydb.cursor()
 
-    if request.method == "GET":
-        mycursor.execute("SELECT * FROM Ventas")
-        myresult = mycursor.fetchall()
-        return make_response(jsonify(myresult))
+        if request.method == "GET":
+            mycursor.execute("SELECT * FROM Ventas")
+            myresult = mycursor.fetchall()
+            return make_response(jsonify(myresult))
 
-    elif request.method == "POST":
-        sql = "INSERT INTO Ventas (ciudad, estado, codigo_postal, referencia) VALUES (%s, %s, %s, %s)"
-        val = (request.form['ciudad'], request.form['estado'], request.form['codigo_postal'], request.form['referencia'])
-        mycursor.execute(sql, val)
-        mydb.commit()
-        return make_response(jsonify({"estado": "ok"}))
+        elif request.method == "POST":
+            sql = "INSERT INTO Ventas (ciudad, estado, codigo_postal, referencia) VALUES (%s, %s, %s, %s)"
+            val = (
+                request.form['ciudad'],
+                request.form['estado'],
+                request.form['codigo_postal'],
+                request.form['referencia']
+            )
+            mycursor.execute(sql, val)
+            mydb.commit()
+            return make_response(jsonify({"estado": "ok"}))
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), 500)
