@@ -24,8 +24,10 @@ def ventas():
         return make_response(jsonify(myresult))
 
     elif request.method == "POST":
-        sql = "INSERT INTO Ventas (id_cliente, id_libro, ciudad, estado, codigo_postal, referencia) VALUES (%s, %s, %s, %s, %s, %s)"
-        val = (request.form['id_cliente'], request.form['id_libro'], request.form['ciudad'], request.form['estado'], request.form['codigo_postal'], request.form['referencia'])
+        sql = "INSERT INTO Ventas (id_cliente, id_libro, ciudad, estado, codigo_postal, referencia) 
+        VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (request.form['id_cliente'], request.form['id_libro'], request.form['ciudad'], 
+               request.form['estado'], request.form['codigo_postal'], request.form['referencia'])
         mycursor.execute(sql, val)
         mydb.commit()
         return make_response(jsonify({"estado": "ok"}))
